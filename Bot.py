@@ -234,22 +234,21 @@ import logging
 from database.handlers import router
 from aiogram import Bot, Dispatcher
 from database.models import async_main
+
 env_path = r"C:\Users\Almaz\PycharmProjects\PythonProject3\.venv\.env"
 load_dotenv(env_path)
 
 bot = Bot(token=os.getenv("TOKEN"))
+dp = Dispatcher()  # Создаём объект Dispatcher без bot
 
-dp = Dispatcher()
+dp.include_router(router)
 
 async def main():
     await async_main()
-    bot = Bot(token=os.getenv("TOKEN"))
-    dp = Dispatcher()
-    dp.include_router(router)
-    await dp.start_polling(bot)
+    await bot.delete_webhook()
+    await dp.start_polling(bot)  # Передаем bot в start_polling
 
 if __name__ == '__main__':
-    # logging.basicConfig(level=logging.INFO)
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
