@@ -1,6 +1,4 @@
-from html.parser import HTMLParser
-from os import getenv
-from wsgiref.util import request_uri
+
 
 # import telebot
 # import webbrowser
