@@ -1,4 +1,4 @@
-from tkinter.font import names
+
 
 from database.models import async_session
 from database.models import User, Category, Item
