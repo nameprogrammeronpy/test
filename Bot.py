@@ -225,19 +225,32 @@
 #
 # bot.infinity_polling()
 
+from fastapi import FastAPI, Request
 import asyncio
+from contextlib import asynccontextmanager
 import os
 from dotenv import load_dotenv
 import logging
 from database.handlers import router
 from aiogram import Bot, Dispatcher
 from database.models import async_main
-
+from aiogram.types import Update
 env_path = r"C:\Users\Almaz\PycharmProjects\PythonProject3\.venv\.env"
 load_dotenv(env_path)
-
+WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 bot = Bot(token=os.getenv("TOKEN"))
 dp = Dispatcher()  # Создаём объект Dispatcher без bot
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Бот запущен!")  # Здесь можешь добавить логику старта бота
+    yield
+    print("Бот выключается...")  # Это выполнится при завершении работы
+
+app = FastAPI(lifespan=lifespan)
+
+@app.get("/")
+async def home():
+    return {"message": "Бот работает!"}
 
 dp.include_router(router)
 
@@ -246,8 +259,6 @@ async def main():
     await bot.delete_webhook()
     await dp.start_polling(bot)  # Передаем bot в start_polling
 
-if __name__ == '__main__':
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print('Exiting...')
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
