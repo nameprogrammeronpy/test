@@ -252,13 +252,12 @@ app = FastAPI(lifespan=lifespan)
 async def home():
     return {"message": "Бот работает!"}
 
-dp.include_router(router)
+@app.post("/webhook")
+async def webhook(request: Request):
+    data = await request.json()
+    update = Update(**data)
+    await dp.feed_update(bot, update)
+    return {"status": "ok"}
 
-async def main():
-    await async_main()
-    await bot.delete_webhook()
-    await dp.start_polling(bot)  # Передаем bot в start_polling
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+
