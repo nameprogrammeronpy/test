@@ -240,14 +240,8 @@ load_dotenv(env_path)
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 bot = Bot(token=os.getenv("TOKEN"))
 dp = Dispatcher()  # Создаём объект Dispatcher без bot
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    print("Бот запущен!")  # Здесь можешь добавить логику старта бота
-    yield
-    print("Бот выключается...")  # Это выполнится при завершении работы
 
-app = FastAPI(lifespan=lifespan)
-
+app = FastAPI()
 @app.get("/")
 async def home():
     return {"message": "Бот работает!"}
@@ -258,6 +252,7 @@ async def webhook(request: Request):
     update = Update(**data)
     await dp.feed_update(bot, update)
     return {"status": "ok"}
-
-
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 
