@@ -240,7 +240,7 @@ load_dotenv(env_path)
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 bot = Bot(token=os.getenv("TOKEN"))
 dp = Dispatcher()  # Создаём объект Dispatcher без bot
-
+dp.include_router(router)
 app = FastAPI()
 @app.get("/")
 async def home():
