@@ -112,12 +112,10 @@ class Generate(StatesGroup):
 context_memory = {}
 @router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext):
-    if message.from_user.username == "Erhandro":
-        await message.answer("Добро пожаловать, Чучмек! Введите свой запрос, только не связаный с фашизмом")
-    else:
-        await message.answer("Добро Пожаловать! Введите Ваш запрос")
+    
+await message.answer("Добро Пожаловать! Введите Ваш запрос")
 
-        await state.clear()
+await state.clear()
 
 @router.message(Command("help"))
 async def lowkrt(message: Message):
