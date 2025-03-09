@@ -109,7 +109,10 @@ class Reg(StatesGroup):
 #______________________________________________________________________________________
 class Generate(StatesGroup):
     text = State()
+    
 context_memory = {}
+
+
 @router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext):
     
